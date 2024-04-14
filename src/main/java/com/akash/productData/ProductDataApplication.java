@@ -35,8 +35,14 @@ public class ProductDataApplication implements CommandLineRunner {
 //		Product product=productRepository.findById(1).orElseThrow(()-> new RuntimeException("Data Not found"));
 //		System.out.println(product);
 
-		Employee employee=Employee.builder()
-				.name("ALOK222q1").build();
-		employeeRepository.save(employee);
+//		Employee employee=Employee.builder()
+//				.name("ALOK222q1").build();
+//		employeeRepository.save(employee);
+
+		finderMethods();
+	}
+
+	private void finderMethods() {
+		System.out.println(productRepository.findByName("Washer"));
 	}
 }
