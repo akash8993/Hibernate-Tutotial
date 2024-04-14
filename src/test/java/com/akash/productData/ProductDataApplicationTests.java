@@ -7,12 +7,13 @@ import com.akash.productData.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-
 @SpringBootTest
 class ProductDataApplicationTests {
 
@@ -82,5 +83,45 @@ class ProductDataApplicationTests {
 		List<Product> findByIdIn= productRepository.findByIdIn(Arrays.asList(1,2,3));
 		findByIdIn.stream().forEach(x-> System.out.println(x.getName()+" "+x.getId()));
 
+	}
+
+	/*For Paging And Sorting Repository
+	using methods to test Paging and Sorting
+	* */
+	@Test
+	public void pagingAndSorting()
+	{
+		Pageable pageable= PageRequest.of(0,3);
+
+		Page<Product> data= productRepository.findAll(pageable);
+
+		data.stream().forEach(x-> System.out.println(x.getName()+" "+x.getDescription()));
+	}
+
+	@Test
+	public void Sorting()
+	{
+		productRepository.findAll(Sort.by(Sort.Direction.DESC,"name")).forEach(x-> System.out.println(x.getName()));
+
+		productRepository.findAll(Sort.by(Sort.Direction.DESC, "name","price")).forEach(x-> System.out.println(x.getName()+" "+x.getPrice()));
+
+		productRepository.findAll(Sort.by(new Sort.Order(Sort.Direction.DESC, "name"), new Sort.Order(Sort.Direction.ASC,"price"))).forEach(x-> System.out.println(x.getName()+" "+x.getPrice()));
+
+	}
+
+	@Test
+	public void pagingAndSortingFindAll()
+	{
+		Pageable pageable= PageRequest.of(0,2, Sort.Direction.DESC, "name");
+		productRepository.findAll(pageable).forEach(x-> System.out.println(x.getName()+" "+x.getPrice()));
+
+	}
+
+	@Test
+	public void PageableRequestInRepo()
+	{
+		Pageable pageable= PageRequest.of(0,2);
+		List<Product> products= productRepository.findByIdIn(Arrays.asList(1,2,3),pageable);
+		products.stream().forEach(x-> System.out.println(x.getName()+" "+x.getPrice()));
 	}
 }

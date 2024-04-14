@@ -1,13 +1,15 @@
 package com.akash.productData.repository;
 
 import com.akash.productData.entity.Product;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends CrudRepository<Product, Integer> {
+public interface ProductRepository extends CrudRepository<Product, Integer>, PagingAndSortingRepository<Product, Integer> {
 
     public List<Product> findByName(String name);
 
@@ -22,4 +24,5 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
     public List<Product> findByDescriptionLike(String desc);
 
     public List<Product> findByIdIn(List<Integer> ids);
+    public List<Product> findByIdIn(List<Integer> ids, Pageable pageable);
 }
