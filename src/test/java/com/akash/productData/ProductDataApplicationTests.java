@@ -2,8 +2,11 @@ package com.akash.productData;
 
 import com.akash.productData.entity.Employee;
 import com.akash.productData.entity.Product;
+import com.akash.productData.entity.Student;
 import com.akash.productData.repository.EmployeeRepository;
 import com.akash.productData.repository.ProductRepository;
+import com.akash.productData.repository.StudentRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Rollback;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +26,9 @@ class ProductDataApplicationTests {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
+
+	@Autowired
+	private StudentRepository studentRepository;
 	@Test
 	void contextLoads() {
 	}
@@ -124,4 +131,53 @@ class ProductDataApplicationTests {
 		List<Product> products= productRepository.findByIdIn(Arrays.asList(1,2,3),pageable);
 		products.stream().forEach(x-> System.out.println(x.getName()+" "+x.getPrice()));
 	}
+
+	//FOR THE JPQL TEsting
+	@Test
+	public void addStudent()
+	{
+		Student student= Student.builder()
+				.firstName("Akash")
+				.lastName("Gupta")
+				.score(100)
+				.id(1)
+				.build();
+		studentRepository.save(student);
+	}
+
+	@Test
+	public void fetchAllStudents()
+	{
+		studentRepository.findAllStudents().stream().forEach(x-> System.out.println(x.getFirstName()+" "+x.getLastName()));
+
+		/*Jab bhi partial data get krenge to Object [] aaega fir ek ek column se data leneg*/
+
+		List<Object[]> data=studentRepository.findAllStudentPartialData();
+		for(Object [] objects: data)
+		{
+			System.out.println(objects[0]+" 2nd column "+ objects[1]);
+		}
+
+	}
+
+	@Test
+	public void findStudentByFirstName()
+	{
+		System.out.println(studentRepository.findAllStudentsByFirstName("Akash"));
+	}
+	@Test
+	public void findStudentByScore()
+	{
+		System.out.println(studentRepository.findAllStudentsByScore(20,100));
+	}
+	
+	//RollBack bcoz we dont want to get back the data
+	@Test
+	@Transactional
+	@Rollback(value = false)
+	public void deleteStudent()
+	{
+	studentRepository.deleteStudentByName("rer");
+	}
+
 }
