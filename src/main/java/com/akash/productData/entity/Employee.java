@@ -13,6 +13,8 @@ import org.hibernate.annotations.GenericGenerator;
 public class Employee {
 
  //The below 2 are used when we want to create a new table that will be having the id and associated data
+   // yahan pe table hai vo table jo apan ne banaye hai database mein
+   // allocation se kitne size se badhna hai har baar
    // @TableGenerator(name = "employee_gen", table = "id_gen",
    //         pkColumnName = "gen_name", valueColumnName = "gen_val", allocationSize = 100)
    // @GeneratedValue(strategy = GenerationType.TABLE, generator = "employee_gen")

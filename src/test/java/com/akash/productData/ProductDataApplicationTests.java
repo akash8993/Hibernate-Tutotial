@@ -64,7 +64,7 @@ class ProductDataApplicationTests {
 		employeeRepository.save(employee);
 	}
 
-	//Now performing Data Finder Methods
+	//Now performing Data Finder Methods -- JPA Wale
 
 	@Test
 	public void findMethods()
@@ -92,13 +92,15 @@ class ProductDataApplicationTests {
 
 	}
 
+	//PagingAndSortingRepository is the child interface of CRUD Repository
 	/*For Paging And Sorting Repository
 	using methods to test Paging and Sorting
 	* */
 	@Test
 	public void pagingAndSorting()
 	{
-		Pageable pageable= PageRequest.of(0,3);
+		//Pageable is an interface
+		Pageable pageable= PageRequest.of(1,3);
 
 		Page<Product> data= productRepository.findAll(pageable);
 
@@ -112,6 +114,8 @@ class ProductDataApplicationTests {
 
 		productRepository.findAll(Sort.by(Sort.Direction.DESC, "name","price")).forEach(x-> System.out.println(x.getName()+" "+x.getPrice()));
 
+		//Ye bcoz apan ko dono property alag alag sort chahie
+		//Isme order class use hoti hai bcoz order leti hai property desc or not
 		productRepository.findAll(Sort.by(new Sort.Order(Sort.Direction.DESC, "name"), new Sort.Order(Sort.Direction.ASC,"price"))).forEach(x-> System.out.println(x.getName()+" "+x.getPrice()));
 
 	}
